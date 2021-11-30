@@ -77,4 +77,14 @@ public class Artist
         return this.songs;
     }
 
+    public void addSong(Song song)
+    {
+        /*
+         * add new song to list of all songs
+         * add(E e) appends to end of arrayList
+         */
+
+        this.songs.add(song);
+    }
+
 }
