@@ -7,6 +7,8 @@ import java.time.temporal.ChronoField;
 import java.time.LocalDate;
 import java.time.format.*;
 
+import javax.swing.*;
+
 public class Utils
 {
     public static HashMap<UUID, String> returnSongDurationAndTitleformatted(ArrayList<Song> songList)
@@ -63,5 +65,63 @@ public class Utils
             default:
                 return false;
         }
+    }
+
+    public static void createExampleArtists(JList<Artist> list)
+    {
+        /*
+         *  create two artists MacMiller and Joji and
+         *  add two songs each to their list of songs
+         */
+        Artist MacMiller = new Artist();
+
+        MacMiller.setFirstName("Malcom James");
+        MacMiller.setLastName("McCormick");
+        MacMiller.setDob("1992 Jan 19");
+        MacMiller.setPlaceOfBirth("Pittsburgh, Pennsylvania");
+
+        ArrayList<Song> Circles = new ArrayList();
+        Circles.add(new Song(MacMiller.getArtistID(), "Circles", 170));
+        Circles.add(new Song(MacMiller.getArtistID(), "Comlicated", 232));
+        Circles.add(new Song(MacMiller.getArtistID(), "Blue World", 209));
+
+        MacMiller.setSongs(Circles);
+
+        // #---------------------------------------------------------------#
+
+        Artist Joji = new Artist();
+
+        Joji.setFirstName("George Kusunoki");
+        Joji.setLastName("Miller");
+        Joji.setDob("1992 Sep 18");
+        Joji.setPlaceOfBirth("Osaka, Japan");
+
+        ArrayList<Song> Nectar = new ArrayList();
+        Nectar.add(new Song(Joji.getArtistID(), "Ew", 207));
+        Nectar.add(new Song(Joji.getArtistID(), "Modus", 207));
+        Nectar.add(new Song(Joji.getArtistID(), "Tick Tock", 132));
+        Nectar.add(new Song(Joji.getArtistID(), "Dayligth (with Diplo)", 163));
+        Nectar.add(new Song(Joji.getArtistID(), "Upgrade", 89));
+        Nectar.add(new Song(Joji.getArtistID(), "Gimme Love", 214));
+        Nectar.add(new Song(Joji.getArtistID(), "Run", 195));
+        Nectar.add(new Song(Joji.getArtistID(), "Sanctuary", 180));
+        Nectar.add(new Song(Joji.getArtistID(), "High Hopes feat. Omar Appollo", 182));
+        Nectar.add(new Song(Joji.getArtistID(), "Nitrous", 131));
+        Nectar.add(new Song(Joji.getArtistID(), "Pretty Boy feat. Lil Yachty", 156));
+        Nectar.add(new Song(Joji.getArtistID(), "Normal People feat. Rei Brown", 166));
+        Nectar.add(new Song(Joji.getArtistID(), "Afterthought feat. Benee", 194));
+        Nectar.add(new Song(Joji.getArtistID(), "777", 181));
+        Nectar.add(new Song(Joji.getArtistID(), "Reanimator feat. Yves Tumor", 183));
+        Nectar.add(new Song(Joji.getArtistID(), "Like You Do", 240));
+        Nectar.add(new Song(Joji.getArtistID(), "Your Man", 163));
+
+        Joji.setSongs(Nectar);
+
+        DefaultListModel<Artist> l1 =(DefaultListModel) list.getModel();
+        l1.addElement(MacMiller);
+        l1.addElement(Joji);
+        list.setModel(l1);
+        list.setBounds(100, 100, 75, 75);
+
     }
 }
