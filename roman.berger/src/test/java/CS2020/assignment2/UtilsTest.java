@@ -10,7 +10,7 @@ public class UtilsTest
     public void isWeekend()
     {
         try{
-            assertTrue(Utils.checkIfBornOnWeekend("2021-12-05"));
+            assertTrue(Utils.checkIfBornOnWeekend("2021 Dec 05"));
         }
         catch(Exception e){
             System.out.println(e);
@@ -22,7 +22,7 @@ public class UtilsTest
     {
         try
         {
-            assertFalse(Utils.checkIfBornOnWeekend("2021-11-30"));
+            assertFalse(Utils.checkIfBornOnWeekend("2021 Nov 30"));
         }
         catch(Exception e)
         {
