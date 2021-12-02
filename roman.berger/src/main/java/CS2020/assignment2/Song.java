@@ -9,9 +9,12 @@ public class Song
     private String title;
     private int duration;
 
-    public Song()
+    public Song(UUID artistID, String title, int duration)
     {
-        //nohting to do yet
+        this.setSongID(UUID.randomUUID());
+        this.setArtistID(artistID);
+        this.setTitle(title);
+        this.setDuration(duration);
     }
 
     public void setSongID(UUID songID)
