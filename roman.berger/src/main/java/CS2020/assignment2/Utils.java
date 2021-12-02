@@ -1,6 +1,7 @@
 package CS2020.assignment2;
 
 import java.util.*;
+import java.util.function.*;
 
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoField;
@@ -34,10 +35,9 @@ public class Utils
             // create formatted String for value from
             // songIter.getTitle() and songIter.getDuration()
             // songIter.getDuration()/60 gives minutes, because int/int = int in java
-            String min_sec = "" + songIter.next().getDuration()/60 + ":" + songIter.next().getDuration()%60;
-            String fText = "" + songIter.next().getTitle() +"(" + min_sec+ ")";
+            BiFunction<String, Integer, String> formatted = (title, duration) -> "" + title + "(" + duration/60 + ":" + duration%60 + ")";
             // add entry to HashMap
-            formattedSongs.put(songIter.next().getSongID(), fText);
+            formattedSongs.put(songIter.next().getSongID(), formatted.apply(songIter.next().getTitle(), songIter.next().getDuration()));
         }
 
         return formattedSongs;
