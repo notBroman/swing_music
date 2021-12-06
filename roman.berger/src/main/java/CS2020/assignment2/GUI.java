@@ -106,6 +106,7 @@ public class GUI
         artistPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         // create JPanel to add 3 buttons to
+        // attach to SOUTH of frame
         JPanel southPane = new JPanel();
         JButton manualData = new JButton("Add Data Manually");
         JButton dbData = new JButton("Add Data From Database");
@@ -115,6 +116,13 @@ public class GUI
         southPane.add(dbData, BorderLayout.CENTER);
         southPane.add(delData, BorderLayout.WEST);
 
+        // create JPanel to add list and textArea to
+        // attach to EAST of frame
+        JPanel eastPane = new JPanel();
+        JTextArea textArea = new JTextArea("Test", 25, 20);
+        JScrollPane scrollText = new JScrollPane(textArea);
+
+        eastPane.add(scrollText, BorderLayout.SOUTH);
 
         this.mainFrame.setSize(800, 600);
         // settings of menubar
@@ -122,6 +130,7 @@ public class GUI
         // add components to BorderLayout
         this.mainFrame.getContentPane().add(menubar1, BorderLayout.NORTH);
         this.mainFrame.getContentPane().add(artistPane, BorderLayout.CENTER);
+        this.mainFrame.getContentPane().add(eastPane, BorderLayout.EAST);
         this.mainFrame.getContentPane().add(southPane, BorderLayout.SOUTH);
         // make frame visible - last operation
         this.mainFrame.setVisible(true);
