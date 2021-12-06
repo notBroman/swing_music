@@ -105,12 +105,24 @@ public class GUI
         artistPane.setVerticalScrollBar(artistPane.createVerticalScrollBar());
         artistPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        // create JPanel to add 3 buttons to
+        JPanel southPane = new JPanel();
+        JButton manualData = new JButton("Add Data Manually");
+        JButton dbData = new JButton("Add Data From Database");
+        JButton delData = new JButton("Delete Selected");
+
+        southPane.add(manualData, BorderLayout.EAST);
+        southPane.add(dbData, BorderLayout.CENTER);
+        southPane.add(delData, BorderLayout.WEST);
+
+
         this.mainFrame.setSize(800, 600);
         // settings of menubar
         menubar1.setBorderPainted(true);
         // add components to BorderLayout
         this.mainFrame.getContentPane().add(menubar1, BorderLayout.NORTH);
-        this.mainFrame.getContentPane().add(artistPane, BorderLayout.WEST);
+        this.mainFrame.getContentPane().add(artistPane, BorderLayout.CENTER);
+        this.mainFrame.getContentPane().add(southPane, BorderLayout.SOUTH);
         // make frame visible - last operation
         this.mainFrame.setVisible(true);
 
