@@ -76,7 +76,7 @@ public class Utils
         Artist MacMiller = new Artist();
 
         MacMiller.setFirstName("Malcom James");
-        MacMiller.setLastName("McCormick");
+        MacMiller.setLastName("McCormick*");
         MacMiller.setDob("1992 Jan 19");
         MacMiller.setPlaceOfBirth("Pittsburgh, Pennsylvania");
 
@@ -92,7 +92,7 @@ public class Utils
         Artist Joji = new Artist();
 
         Joji.setFirstName("George Kusunoki");
-        Joji.setLastName("Miller");
+        Joji.setLastName("Miller*");
         Joji.setDob("1992 Sep 18");
         Joji.setPlaceOfBirth("Osaka, Japan");
 

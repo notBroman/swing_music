@@ -12,7 +12,7 @@ public class GUI
     /*
      *  has a custom ActionListener to do something on action taken
      */
-
+    private JFrame mainFrame = new JFrame("Roman Berger:Assignment 2");
 
     static class MenuActionListener implements ActionListener {
         /*
@@ -33,7 +33,9 @@ public class GUI
         }
     }
 
-    public static void constructGui()
+    public void GUI(){}
+
+    public void constructGui()
     {
         /*
          *  construct the GUI window as in the instruction
@@ -61,8 +63,7 @@ public class GUI
          */
 
         // Create the frame with the title <name>:assignment 2
-        JFrame mainFrame = new JFrame("Roman Berger:Assignment 2");
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Create the menubar
         JMenuBar menubar1 = new JMenuBar();
@@ -92,15 +93,38 @@ public class GUI
         menubar1.add(dataMenuItem);
         menubar1.add(exportMenuItem);
 
-
-
-        mainFrame.setSize(800, 600);
+        // set size of the frame
+        this.mainFrame.setSize(800, 600);
         // settings of menubar
         menubar1.setBorderPainted(true);
         // add menubar to frame
-        mainFrame.setJMenuBar(menubar1);
+        this.mainFrame.setJMenuBar(menubar1);
+
+
+        // create splitPane
+        // idea of using splitPane from
+        // https://stackoverflow.com/questions/36163364/jscrollpane-with-fixed-width
+        //
+        // create JList with DefaultListModel to add ArtistList,
+        // to then create JScrollPane with JList as Viewport
+
+        JSplitPane sPane = new JSplitPane();
+
+        final DefaultListModel model = new DefaultListModel();
+        JList<Artist> artistList = new JList<>(model);
+        Utils.createExampleArtists(artistList);
+
+        JScrollPane artistPane = new JScrollPane(artistList);
+        artistPane.setVerticalScrollBar(artistPane.createVerticalScrollBar());
+        artistPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        sPane.setLeftComponent(artistPane);
+        // sPane.setRightComponent();
+        sPane.setResizeWeight(0.65);
+        sPane.setDividerLocation(.65);
+
+        this.mainFrame.add(sPane);
         // make frame visible - last operation
-        mainFrame.setVisible(true);
+        this.mainFrame.setVisible(true);
 
 
     }
