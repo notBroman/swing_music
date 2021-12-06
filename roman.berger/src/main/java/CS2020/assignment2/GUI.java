@@ -12,6 +12,7 @@ public class GUI
     /*
      *  has a custom ActionListener to do something on action taken
      */
+    private JFrame mainFrame = new JFrame("Roman Berger:Assessment 2");
 
 
     static class MenuActionListener implements ActionListener {
@@ -33,12 +34,13 @@ public class GUI
         }
     }
 
-    public static void constructGui()
+    public void constructGui()
     {
         /*
          *  construct the GUI window as in the instruction
          *
          *  construct a JFrame with title Roman Berger:assignment2
+         *  using BorderLayout
          *
          *  north:
          *  menu bar with options:
@@ -46,10 +48,10 @@ public class GUI
          *  - Data
          *  - Export to CSV
          *
-         *  center:
-         *  East:
-         *  - scrollable JList
          *  West:
+         *  - scrollable JList
+         *
+         *  East:
          *  - Fields with DoB, PlaceOfBirth, BornOnWeekend
          *  - JList of Songs
          *
@@ -61,8 +63,7 @@ public class GUI
          */
 
         // Create the frame with the title <name>:assignment 2
-        JFrame mainFrame = new JFrame("Roman Berger:Assignment 2");
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Create the menubar
         JMenuBar menubar1 = new JMenuBar();
@@ -93,14 +94,25 @@ public class GUI
         menubar1.add(exportMenuItem);
 
 
+        // create JList to add artists to
+        // create JScrollPane with JList as Viewport
+        DefaultListModel model = new DefaultListModel();
+        JList<Artist> artistList = new JList<>(model);
+        artistList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        Utils.createExampleArtists(artistList);
 
-        mainFrame.setSize(800, 600);
+        JScrollPane artistPane = new JScrollPane(artistList);
+        artistPane.setVerticalScrollBar(artistPane.createVerticalScrollBar());
+        artistPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        this.mainFrame.setSize(800, 600);
         // settings of menubar
         menubar1.setBorderPainted(true);
-        // add menubar to frame
-        mainFrame.setJMenuBar(menubar1);
+        // add components to BorderLayout
+        this.mainFrame.getContentPane().add(menubar1, BorderLayout.NORTH);
+        this.mainFrame.getContentPane().add(artistPane, BorderLayout.WEST);
         // make frame visible - last operation
-        mainFrame.setVisible(true);
+        this.mainFrame.setVisible(true);
 
 
     }

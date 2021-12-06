@@ -8,6 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        GUI.constructGui();
+        GUI gui = new GUI();
+        gui.constructGui();
     }
 }
