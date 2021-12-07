@@ -9,6 +9,11 @@ public class Song
     private String title;
     private int duration;
 
+    public Song()
+    {
+        // do nothing, just create the object
+    }
+
     public Song(UUID artistID, String title, int duration)
     {
         this.setSongID(UUID.randomUUID());

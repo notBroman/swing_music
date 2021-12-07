@@ -17,6 +17,11 @@ public class Artist
         this.artistID = UUID.randomUUID();
     }
 
+    public Artist(UUID artistID)
+    {
+        this.artistID = artistID;
+    }
+
     public void setArtistID(UUID artistID)
     {
         this.artistID = artistID;
