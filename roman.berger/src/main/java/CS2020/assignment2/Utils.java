@@ -138,7 +138,7 @@ public class Utils
         try
         {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
+            dbConnect = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
         }
         catch(Exception e)
         {
