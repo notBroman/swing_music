@@ -119,10 +119,30 @@ public class GUI
         // create JPanel to add list and textArea to
         // attach to EAST of frame
         JPanel eastPane = new JPanel();
-        JTextArea textArea = new JTextArea("Test", 25, 20);
+        eastPane.setLayout(new BorderLayout());
+        JTextArea textArea = new JTextArea("Test", 10, 20);
         JScrollPane scrollText = new JScrollPane(textArea);
 
-        eastPane.add(scrollText, BorderLayout.SOUTH);
+        JPanel dataPane = new JPanel();
+        dataPane.setLayout(new GridLayout(3, 2, 10, 5));
+
+        JLabel dobLabel = new JLabel("Date of Birth:");
+        JLabel pobLabel = new JLabel("Place of Birth:");
+        JLabel weekendLabel = new JLabel("Born on Weekend:");
+
+        JTextField dobField = new JTextField(6);
+        JTextField pobField = new JTextField(6);
+        JTextField weekendField = new JTextField(6);
+
+        dataPane.add(dobLabel);
+        dataPane.add(dobField);
+        dataPane.add(pobLabel);
+        dataPane.add(pobField);
+        dataPane.add(weekendLabel);
+        dataPane.add(weekendField);
+
+        eastPane.add(dataPane, BorderLayout.NORTH);
+        eastPane.add(scrollText, BorderLayout.CENTER);
 
         this.mainFrame.setSize(800, 600);
         // settings of menubar
