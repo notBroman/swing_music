@@ -14,6 +14,9 @@ import java.sql.*;
 
 public class Utils
 {
+
+    private Connection dbConnect = null;
+
     public static HashMap<UUID, String> returnSongDurationAndTitleformatted(ArrayList<Song> songList)
     {
         /*
@@ -133,16 +136,89 @@ public class Utils
          *  a function that connects to the database in the resources folder
          *  sqlite-jdbc maintained by xerial
          */
-        Connection dbConnect = null;
 
         try
         {
             Class.forName("org.sqlite.JDBC");
-            dbConnect = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
+            this.dbConnect = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
         }
         catch(Exception e)
         {
             System.out.println(e.getStackTrace());
+        }
+    }
+
+    public void readArtistsAndSongsFromDatabase(JList<Artist> list)
+    {
+       // reads artists and songs from db
+       // creates necessary objects
+       // split name into fName and lName
+
+        ResultSet artistSet = null;
+        ResultSet songSet = null;
+        // Statement stmnt = null;
+
+        String artistQuery = "SELECT artistID, name, placeOfBirth, dob FROM Artist";
+
+        DefaultListModel<Artist> l1 = (DefaultListModel) list.getModel();
+
+        try
+        {
+        this.connectToDatabase();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+
+        try(final Statement stmnt = this.dbConnect.createStatement())
+        {
+            artistSet = stmnt.executeQuery(artistQuery);
+
+            while(artistSet.next())
+            {
+                // create artist and songs for artists
+                Artist artist1 = new Artist(UUID.fromString(artistSet.getString("artistID")));
+                // get full name and split into fName and lName
+                // ignore middle name
+                String name = artistSet.getString("name");
+                String[] splitName = name.split("\\s+");
+                artist1.setFirstName(splitName[0]);
+                artist1.setLastName(splitName[splitName.length - 1]);
+
+                // set date of birth and place of birth
+                artist1.setDob(artistSet.getString("dob"));
+                artist1.setPlaceOfBirth(artistSet.getString("placeOfBirth"));
+
+                // get resultset of artists songs
+                String songQuery = "SELECT songID, artistID, title, duration FROM Song WHERE artistID = '"
+                    + artistSet.getString("artistID") + "';";
+                songSet = stmnt.executeQuery(songQuery);
+
+                // create ArrayList of Song and add songs to it
+                ArrayList<Song> songList = new ArrayList<>();
+                while(songSet.next())
+                {
+                    Song song1 = new Song();
+                    song1.setSongID(UUID.fromString(songSet.getString("songID")));
+                    song1.setArtistID(UUID.fromString(artistSet.getString("artistID")));
+                    song1.setTitle(songSet.getString("title"));
+                    song1.setDuration(songSet.getInt("duration"));
+
+                    songList.add(song1);
+                }
+
+                artist1.setSongs(songList);
+
+                l1.addElement(artist1);
+            }
+
+            list.setModel(l1);
+            list.setBounds(100, 100, 75, 75);
+        }
+        catch(SQLException e)
+        {
+            System.out.println("SQLException:\n" + e.getStackTrace());
         }
     }
 }
