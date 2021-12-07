@@ -30,10 +30,36 @@ public class GUI
             {
                 case "About":
                     // create new frame for About popup
-                    System.out.println("new frame for about");
+                    JFrame aboutFrame = new JFrame("About");
+                    aboutFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    aboutFrame.setLayout(new BorderLayout());
+
+                    Icon javaIcon = new ImageIcon( this.getClass().getResource( "/java_logo.jpg" ));
+                    JLabel appInfo = new JLabel("Assignment 2 App v1.0.0", javaIcon, SwingConstants.LEFT);
+                    JButton okButton = new JButton("Ok");
+                    okButton.setActionCommand("OkButton");
+                    okButton.addActionListener(new MenuActionListener());
+
+
+                    aboutFrame.getContentPane().add(appInfo, BorderLayout.NORTH);
+                    aboutFrame.getContentPane().add(okButton, BorderLayout.EAST);
+
+                    // good size may be (300, 200)
+                    aboutFrame.pack();
+                    aboutFrame.setVisible(true);
+                    break;
+
+                case "OkButton":
+                    // get frame in which button resides
+                    // close frame
+                    JComponent comp = (JComponent) e.getSource();
+                    JFrame frm = (JFrame) SwingUtilities.getWindowAncestor(comp);
+                    frm.dispose();
+                    break;
 
                 default:
                     System.out.println("event occured");
+                    break;
             }
         }
     }
