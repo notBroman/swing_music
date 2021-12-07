@@ -202,7 +202,7 @@ public class Utils
                     Song song1 = new Song();
                     song1.setSongID(UUID.fromString(songSet.getString("songID")));
                     song1.setArtistID(UUID.fromString(artistSet.getString("artistID")));
-                    song1.setTitle(songSet.getString("title"));
+                    song1.setTitle(songSet.getString("title").replace("\r\n?|\n", ""));
                     song1.setDuration(songSet.getInt("duration"));
 
                     songList.add(song1);
