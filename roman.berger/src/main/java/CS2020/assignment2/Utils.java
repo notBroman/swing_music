@@ -10,6 +10,8 @@ import java.time.format.*;
 
 import javax.swing.*;
 
+import java.sql.*;
+
 public class Utils
 {
     public static HashMap<UUID, String> returnSongDurationAndTitleformatted(ArrayList<Song> songList)
@@ -123,5 +125,24 @@ public class Utils
         list.setModel(l1);
         list.setBounds(100, 100, 75, 75);
 
+    }
+
+    public void connectToDatabase()
+    {
+        /*
+         *  a function that connects to the database in the resources folder
+         *  sqlite-jdbc maintained by xerial
+         */
+        Connection dbConnect = null;
+
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getStackTrace());
+        }
     }
 }
