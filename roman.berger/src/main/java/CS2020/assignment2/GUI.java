@@ -28,6 +28,10 @@ public class GUI
 
             switch(event)
             {
+                case "About":
+                    // create new frame for About popup
+                    System.out.println("new frame for about");
+
                 default:
                     System.out.println("event occured");
             }
@@ -116,13 +120,14 @@ public class GUI
         southPane.add(dbData, BorderLayout.CENTER);
         southPane.add(delData, BorderLayout.WEST);
 
-        // create JPanel to add list and textArea to
+        // create JPanel to add JPanel and textArea to
         // attach to EAST of frame
         JPanel eastPane = new JPanel();
         eastPane.setLayout(new BorderLayout());
         JTextArea textArea = new JTextArea("Test", 10, 20);
         JScrollPane scrollText = new JScrollPane(textArea);
 
+        // create JPanel for the the data fields above the TextField
         JPanel dataPane = new JPanel();
         dataPane.setLayout(new GridLayout(3, 2, 10, 5));
 
@@ -134,6 +139,7 @@ public class GUI
         JTextField pobField = new JTextField(6);
         JTextField weekendField = new JTextField(6);
 
+        //fill JPanel for data
         dataPane.add(dobLabel);
         dataPane.add(dobField);
         dataPane.add(pobLabel);
@@ -141,6 +147,7 @@ public class GUI
         dataPane.add(weekendLabel);
         dataPane.add(weekendField);
 
+        // add dataPanel and TextField to Panel
         eastPane.add(dataPane, BorderLayout.NORTH);
         eastPane.add(scrollText, BorderLayout.CENTER);
 
