@@ -15,7 +15,6 @@ import java.sql.*;
 public class Utils
 {
 
-    private Connection dbConnect = null;
 
     public static HashMap<UUID, String> returnSongDurationAndTitleformatted(ArrayList<Song> songList)
     {
@@ -130,30 +129,35 @@ public class Utils
 
     }
 
-    public void connectToDatabase()
+    public static Connection connectToDatabase()
     {
         /*
          *  a function that connects to the database in the resources folder
          *  sqlite-jdbc maintained by xerial
          */
+        Connection dbConnect = null;
 
         try
         {
             Class.forName("org.sqlite.JDBC");
-            this.dbConnect = DriverManager.getConnection("jdbc:sqlite:/CS2020-assignment2.db");
+            dbConnect = DriverManager.getConnection("jdbc:sqlite:/home/notbroman/dev/java/uni/swing_music/roman.berger/resources/CS2020-assignment2.db");
+            System.out.println("Connection Established");
         }
         catch(Exception e)
         {
-            System.out.println(e.getStackTrace());
+            System.err.println(e.getMessage());
         }
+        return dbConnect;
     }
 
-    public void readArtistsAndSongsFromDatabase(JList<Artist> list)
+    public static void readArtistsAndSongsFromDatabase(JList<Artist> list)
     {
        // reads artists and songs from db
        // creates necessary objects
        // split name into fName and lName
 
+        Connection dbConnect = null;
+        Statement stmnt = null;
         ResultSet artistSet = null;
         ResultSet songSet = null;
         // Statement stmnt = null;
@@ -164,15 +168,8 @@ public class Utils
 
         try
         {
-        this.connectToDatabase();
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getStackTrace());
-        }
-
-        try(final Statement stmnt = this.dbConnect.createStatement())
-        {
+            dbConnect = Utils.connectToDatabase();
+            stmnt = dbConnect.createStatement();
             artistSet = stmnt.executeQuery(artistQuery);
 
             while(artistSet.next())
@@ -202,6 +199,8 @@ public class Utils
                     Song song1 = new Song();
                     song1.setSongID(UUID.fromString(songSet.getString("songID")));
                     song1.setArtistID(UUID.fromString(artistSet.getString("artistID")));
+                    String title = songSet.getString("title");
+                    title.replace("\r\n?|\n", "");
                     song1.setTitle(songSet.getString("title").replace("\r\n?|\n", ""));
                     song1.setDuration(songSet.getInt("duration"));
 
@@ -213,12 +212,27 @@ public class Utils
                 l1.addElement(artist1);
             }
 
+            System.out.println(l1);
             list.setModel(l1);
             list.setBounds(100, 100, 75, 75);
         }
         catch(SQLException e)
         {
-            System.out.println("SQLException:\n" + e.getStackTrace());
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+           try
+           {
+                if(dbConnect != null)
+                {
+                    dbConnect.close();
+                }
+           }
+           catch(Exception e)
+           {
+               System.err.println(e.getMessage());
+           }
         }
     }
 }
