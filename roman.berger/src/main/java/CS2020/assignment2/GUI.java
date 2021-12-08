@@ -49,6 +49,27 @@ public class GUI
                     aboutFrame.setVisible(true);
                     break;
 
+                case "manualData":
+                    // find the JList<Artist> in the scrollpane
+                    // addExampleArtists
+                    // disable button afterwards
+                    JComponent comp1 = (JComponent) e.getSource();
+                    JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
+                    BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
+                    JScrollPane scrollPane = (JScrollPane) bLayout.getLayoutComponent(BorderLayout.CENTER);
+                    JList<Artist> artistList = (JList) scrollPane.getViewport().getView();
+                    Utils.createExampleArtists(artistList);
+                    comp1.setEnabled(false);
+                    break;
+
+                case "databaseData":
+                    // add data from database
+                    break;
+
+                case "deleteData":
+                    // delete selected data from list
+                    break;
+
                 case "OkButton":
                     // get frame in which button resides
                     // close frame
@@ -129,7 +150,6 @@ public class GUI
         DefaultListModel model = new DefaultListModel();
         JList<Artist> artistList = new JList<>(model);
         artistList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        Utils.createExampleArtists(artistList);
 
         JScrollPane artistPane = new JScrollPane(artistList);
         artistPane.setVerticalScrollBar(artistPane.createVerticalScrollBar());
@@ -139,8 +159,16 @@ public class GUI
         // attach to SOUTH of frame
         JPanel southPane = new JPanel();
         JButton manualData = new JButton("Add Data Manually");
+        manualData.setActionCommand("manualData");
         JButton dbData = new JButton("Add Data From Database");
+        dbData.setActionCommand("databaseData");
         JButton delData = new JButton("Delete Selected");
+        delData.setActionCommand("deleteData");
+
+        // add ActionListeners to buttons
+        manualData.addActionListener(menuListener);
+        dbData.addActionListener(menuListener);
+        delData.addActionListener(menuListener);
 
         southPane.add(manualData, BorderLayout.EAST);
         southPane.add(dbData, BorderLayout.CENTER);
