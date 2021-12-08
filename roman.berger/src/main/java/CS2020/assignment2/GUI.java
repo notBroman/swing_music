@@ -64,6 +64,12 @@ public class GUI
 
                 case "databaseData":
                     // add data from database
+                    JComponent comp2 = (JComponent) e.getSource();
+                    JFrame frm2 = (JFrame) SwingUtilities.getWindowAncestor(comp2);
+                    BorderLayout bLayout2 = (BorderLayout) frm2.getContentPane().getLayout();
+                    JScrollPane scrollPane2 = (JScrollPane) bLayout2.getLayoutComponent(BorderLayout.CENTER);
+                    JList<Artist> artistList2 = (JList) scrollPane2.getViewport().getView();
+                    Utils.readArtistsAndSongsFromDatabase(artistList2);
                     break;
 
                 case "deleteData":
