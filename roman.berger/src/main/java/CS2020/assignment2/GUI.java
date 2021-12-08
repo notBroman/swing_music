@@ -85,6 +85,22 @@ public class GUI
         }
     }
 
+    public class ArtistListCellRenderer extends DefaultListCellRenderer
+    {
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+        {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(value instanceof Artist)
+            {
+                Artist artist = (Artist) value;
+                setText("" + artist.getFirstName() + " " + artist.getLastName());
+                // no tooltip
+                // no icon
+            }
+            return this;
+        }
+    }
+
     public void constructGui()
     {
         /*
@@ -149,6 +165,7 @@ public class GUI
         // create JScrollPane with JList as Viewport
         DefaultListModel model = new DefaultListModel();
         JList<Artist> artistList = new JList<>(model);
+        artistList.setCellRenderer(new ArtistListCellRenderer());
         artistList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane artistPane = new JScrollPane(artistList);
