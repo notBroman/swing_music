@@ -62,8 +62,8 @@
               <manifest>
                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                     <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                    <addClasspath>true</addClasspath>
-                    <classpathPrefix>dependency/</classpathPrefix>
+                        <addClasspath>true</addClasspath>
+                        <classpathPrefix>dependency/</classpathPrefix>
                     <mainClass>CS2020.assignment2.App</mainClass>
               </manifest>
             </archive>
