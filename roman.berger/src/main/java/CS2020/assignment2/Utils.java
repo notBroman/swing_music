@@ -84,8 +84,8 @@ public class Utils
          */
         Artist MacMiller = new Artist();
 
-        MacMiller.setFirstName("Malcom James");
-        MacMiller.setLastName("McCormick*");
+        MacMiller.setFirstName("Mac");
+        MacMiller.setLastName("Miller*");
         MacMiller.setDob("19 Jan 1992");
         MacMiller.setPlaceOfBirth("Pittsburgh, Pennsylvania");
 
@@ -100,8 +100,8 @@ public class Utils
 
         Artist Joji = new Artist();
 
-        Joji.setFirstName("George Kusunoki");
-        Joji.setLastName("Miller*");
+        Joji.setFirstName("Joji");
+        Joji.setLastName("Joji*");
         Joji.setDob("18 Sep 1992");
         Joji.setPlaceOfBirth("Osaka, Japan");
 
@@ -127,8 +127,22 @@ public class Utils
         Joji.setSongs(Nectar);
 
         DefaultListModel<Artist> l1 =(DefaultListModel) list.getModel();
-        l1.addElement(MacMiller);
-        l1.addElement(Joji);
+        ArrayList<Artist> artistList = new ArrayList<>();
+
+        while(!l1.isEmpty())
+        {
+            artistList.add(l1.firstElement());
+            l1.removeElement(l1.firstElement());
+        }
+        artistList.add(Joji);
+        artistList.add(MacMiller);
+        Utils.selSortArtists(artistList);
+
+        for(Artist artist : artistList)
+        {
+            l1.addElement(artist);
+        }
+
         list.setModel(l1);
         // list.setBounds(100, 100, 75, 75);
 
@@ -181,6 +195,12 @@ public class Utils
             stmntSong = dbConnectSong.createStatement();
             artistResultSet = stmntArtist.executeQuery(artistQuery);
             ArrayList<Artist> artistList = new ArrayList<>();
+
+            while(!l1.isEmpty())
+            {
+                artistList.add(l1.firstElement());
+                l1.removeElement(l1.firstElement());
+            }
             // artistResultSet.next();
 
             while(artistResultSet.next())
@@ -228,6 +248,7 @@ public class Utils
                 artistList.add(artist1);
                 //System.out.println(artistResultSet.isClosed());
             }
+            Utils.selSortArtists(artistList);
             for(Artist a : artistList)
             {
                 l1.addElement(a);
@@ -257,6 +278,30 @@ public class Utils
            {
                System.err.println(e.getMessage());
            }
+        }
+    }
+
+    public static void selSortArtists(ArrayList<Artist> artistList)
+    {
+        int start = 0;
+        int end = artistList.size() - 1;
+        String artist1 = "";
+        String artist2 = "";
+        for(int i = start; i <= end; i++)
+        {
+            int minIdx = i;
+            for(int j = i + 1; j <= end; j++)
+            {
+                artist1 = artistList.get(minIdx).getFirstName();
+                artist2 = artistList.get(j).getFirstName();
+                if(artist1.compareToIgnoreCase(artist2) > 0)
+                {
+                    minIdx = j;
+                }
+            }
+            Artist buffer = artistList.get(i);
+            artistList.set(i, artistList.get(minIdx));
+            artistList.set(minIdx, buffer);
         }
     }
 }
