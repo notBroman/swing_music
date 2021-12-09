@@ -16,24 +16,22 @@ public class GUI
     private JFrame mainFrame = new JFrame("Roman Berger:Assessment 2");
 
 
-    static class MenuActionListener implements ActionListener {
+     class MenuActionListener implements ActionListener {
         /*
          *  adapted the example found at:
          *  https://www.tutorialspoint.com/swingexamples/creating_menu_bar.htm
          */
 
-        public JList<Artist> getList(JComponent comp1)
+        public JList<Artist> getList()
         {
-            JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
-            BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
+            BorderLayout bLayout = (BorderLayout) mainFrame.getContentPane().getLayout();
             JScrollPane scrollPane = (JScrollPane) bLayout.getLayoutComponent(BorderLayout.CENTER);
             return (JList) scrollPane.getViewport().getView();
         }
 
-        public ArrayList<JButton> getSouthButtons(JComponent comp1)
+        public ArrayList<JButton> getSouthButtons()
         {
-            JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
-            BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
+            BorderLayout bLayout = (BorderLayout) mainFrame.getContentPane().getLayout();
             JPanel southPane = (JPanel) bLayout.getLayoutComponent(BorderLayout.SOUTH);
             ArrayList<JButton> southButton = new ArrayList<>();
             for(Component b : southPane.getComponents())
@@ -60,7 +58,7 @@ public class GUI
                     Icon javaIcon = new ImageIcon( this.getClass().getResource( "/java_logo.jpg" ));
                     JLabel appInfo = new JLabel("Assignment 2 App v1.0.0", javaIcon, SwingConstants.LEFT);
                     JButton okButton = new JButton("Ok");
-                    okButton.setActionCommand("OkButton");
+                    okButton.setActionCommand("Exit");
                     okButton.addActionListener(new MenuActionListener());
 
 
@@ -76,18 +74,16 @@ public class GUI
                     // find the JList<Artist> in the scrollpane
                     // addExampleArtists
                     // disable button afterwards
-                    JComponent comp1 = (JComponent) e.getSource();
-                    Utils.createExampleArtists(this.getList(comp1));
-                    ArrayList<JButton> southButtons = getSouthButtons(comp1);
+                    Utils.createExampleArtists(this.getList());
+                    ArrayList<JButton> southButtons = getSouthButtons();
                     southButtons.get(0).setEnabled(false);
                     southButtons.get(2).setEnabled(true);
                     break;
 
                 case "databaseData":
                     // add data from database
-                    JComponent comp2 = (JComponent) e.getSource();
-                    Utils.readArtistsAndSongsFromDatabase(this.getList(comp2));
-                    ArrayList<JButton> southButtons1 = getSouthButtons(comp2);
+                    Utils.readArtistsAndSongsFromDatabase(this.getList());
+                    ArrayList<JButton> southButtons1 = getSouthButtons();
                     southButtons1.get(1).setEnabled(false);
                     southButtons1.get(2).setEnabled(true);
 
@@ -95,9 +91,12 @@ public class GUI
 
                 case "deleteData":
                     // delete selected data from list
-                    JComponent compDel = (JComponent) e.getSource();
-                    JList<Artist> artistListDel = this.getList(compDel);
-                    ArrayList<JButton> southButtons2 = getSouthButtons(compDel);
+                    JComponent comp0 = (JComponent) e.getSource();
+                    JFrame frm0 = (JFrame) SwingUtilities.getWindowAncestor(comp0);
+                    frm0.dispose();
+
+                    JList<Artist> artistListDel = this.getList();
+                    ArrayList<JButton> southButtons2 = getSouthButtons();
                     int idxDel = artistListDel.getSelectedIndex();
                     if(idxDel != -1)
                     {
@@ -116,12 +115,45 @@ public class GUI
 
                     break;
 
-                case "OkButton":
+                case "Exit":
                     // get frame in which button resides
                     // close frame
                     JComponent comp = (JComponent) e.getSource();
                     JFrame frm = (JFrame) SwingUtilities.getWindowAncestor(comp);
                     frm.dispose();
+                    break;
+
+                case "AreYouSure":
+                    // create new frame for About popup
+                    JFrame sureFrame = new JFrame("Select an Option");
+                    sureFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                    sureFrame.setLayout(new BorderLayout());
+
+                    Icon javaIcon1 = new ImageIcon( this.getClass().getResource( "/java_logo.jpg" ));
+                    JLabel appInfo1 = new JLabel("Are you sure?", javaIcon1, SwingConstants.LEFT);
+                    JButton cancelButton = new JButton("Cancel");
+                    cancelButton.setActionCommand("Exit");
+                    cancelButton.addActionListener(this);
+
+                    JButton noButton = new JButton("No");
+                    noButton.setActionCommand("Exit");
+                    noButton.addActionListener(this);
+
+                    JButton yesButton = new JButton("Yes");
+                    yesButton.setActionCommand("deleteData");
+                    yesButton.addActionListener(this);
+
+                    JPanel pane = new JPanel();
+                    pane.add(cancelButton, BorderLayout.WEST);
+                    pane.add(noButton, BorderLayout.CENTER);
+                    pane.add(yesButton, BorderLayout.EAST);
+
+                    sureFrame.getContentPane().add(appInfo1, BorderLayout.NORTH);
+                    sureFrame.getContentPane().add(pane, BorderLayout.CENTER);
+
+                    // good size may be (300, 200)
+                    sureFrame.pack();
+                    sureFrame.setVisible(true);
                     break;
 
                 default:
@@ -295,7 +327,7 @@ public class GUI
         JButton dbData = new JButton("Add Data From Database");
         dbData.setActionCommand("databaseData");
         JButton delData = new JButton("Delete Selected");
-        delData.setActionCommand("deleteData");
+        delData.setActionCommand("AreYouSure");
 
         // add ActionListeners to buttons
         manualData.addActionListener(menuListener);
