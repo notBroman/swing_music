@@ -54,7 +54,11 @@ public class Utils
          *
          * uses the time module of the java SDK
          */
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if(dob.length() < 11)
+        {
+            dob = "0" + dob;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         LocalDate birthday = LocalDate.parse(dob, formatter);
         DayOfWeek day = DayOfWeek.of(birthday.get(ChronoField.DAY_OF_WEEK));
 
@@ -81,7 +85,7 @@ public class Utils
 
         MacMiller.setFirstName("Malcom James");
         MacMiller.setLastName("McCormick*");
-        MacMiller.setDob("1992 Jan 19");
+        MacMiller.setDob("19 Jan 1992");
         MacMiller.setPlaceOfBirth("Pittsburgh, Pennsylvania");
 
         ArrayList<Song> Circles = new ArrayList();
@@ -97,7 +101,7 @@ public class Utils
 
         Joji.setFirstName("George Kusunoki");
         Joji.setLastName("Miller*");
-        Joji.setDob("1992 Sep 18");
+        Joji.setDob("18 Sep 1992");
         Joji.setPlaceOfBirth("Osaka, Japan");
 
         ArrayList<Song> Nectar = new ArrayList();
