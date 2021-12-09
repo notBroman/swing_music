@@ -70,6 +70,7 @@ public class GUI
                     JScrollPane scrollPane2 = (JScrollPane) bLayout2.getLayoutComponent(BorderLayout.CENTER);
                     JList<Artist> artistList2 = (JList) scrollPane2.getViewport().getView();
                     Utils.readArtistsAndSongsFromDatabase(artistList2);
+                    comp2.setEnabled(false);
                     break;
 
                 case "deleteData":
