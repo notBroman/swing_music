@@ -22,6 +22,28 @@ public class GUI
          *  https://www.tutorialspoint.com/swingexamples/creating_menu_bar.htm
          */
 
+        public JList<Artist> getList(JComponent comp1)
+        {
+            JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
+            BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
+            JScrollPane scrollPane = (JScrollPane) bLayout.getLayoutComponent(BorderLayout.CENTER);
+            return (JList) scrollPane.getViewport().getView();
+        }
+
+        public ArrayList<JButton> getSouthButtons(JComponent comp1)
+        {
+            JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
+            BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
+            JPanel southPane = (JPanel) bLayout.getLayoutComponent(BorderLayout.SOUTH);
+            ArrayList<JButton> southButton = new ArrayList<>();
+            for(Component b : southPane.getComponents())
+            {
+                southButton.add((JButton) b);
+            }
+
+            return southButton;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e)
         {
@@ -55,29 +77,43 @@ public class GUI
                     // addExampleArtists
                     // disable button afterwards
                     JComponent comp1 = (JComponent) e.getSource();
-                    JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(comp1);
-                    BorderLayout bLayout = (BorderLayout) frm1.getContentPane().getLayout();
-                    JScrollPane scrollPane = (JScrollPane) bLayout.getLayoutComponent(BorderLayout.CENTER);
-                    JList<Artist> artistList = (JList) scrollPane.getViewport().getView();
-                    Utils.createExampleArtists(artistList);
-                    comp1.setEnabled(false);
+                    Utils.createExampleArtists(this.getList(comp1));
+                    ArrayList<JButton> southButtons = getSouthButtons(comp1);
+                    southButtons.get(0).setEnabled(false);
+                    southButtons.get(2).setEnabled(true);
                     break;
 
                 case "databaseData":
                     // add data from database
                     JComponent comp2 = (JComponent) e.getSource();
-                    JFrame frm2 = (JFrame) SwingUtilities.getWindowAncestor(comp2);
-                    BorderLayout bLayout2 = (BorderLayout) frm2.getContentPane().getLayout();
-                    JScrollPane scrollPane2 = (JScrollPane) bLayout2.getLayoutComponent(BorderLayout.CENTER);
-                    JList<Artist> artistList2 = (JList) scrollPane2.getViewport().getView();
-                    Utils.readArtistsAndSongsFromDatabase(artistList2);
-                    comp2.setEnabled(false);
+                    Utils.readArtistsAndSongsFromDatabase(this.getList(comp2));
+                    ArrayList<JButton> southButtons1 = getSouthButtons(comp2);
+                    southButtons1.get(1).setEnabled(false);
+                    southButtons1.get(2).setEnabled(true);
+
                     break;
 
                 case "deleteData":
                     // delete selected data from list
+                    JComponent compDel = (JComponent) e.getSource();
+                    JList<Artist> artistListDel = this.getList(compDel);
+                    ArrayList<JButton> southButtons2 = getSouthButtons(compDel);
+                    int idxDel = artistListDel.getSelectedIndex();
+                    if(idxDel != -1)
+                    {
+                        DefaultListModel modelDel = (DefaultListModel) artistListDel.getModel();
+                        modelDel.remove(idxDel);
+                        artistListDel.setModel(modelDel);
+                        artistListDel.setSelectedIndex(-1);
+                        artistListDel.setSelectedIndex(0);
+                    }
+                    if(artistListDel.getFirstVisibleIndex() == -1)
+                    {
+                        southButtons2.get(0).setEnabled(true);
+                        southButtons2.get(1).setEnabled(true);
+                        southButtons2.get(2).setEnabled(false);
+                    }
 
-                    // artistList3.setSelectedIndex(0);
                     break;
 
                 case "OkButton":
@@ -100,33 +136,34 @@ public class GUI
         public void valueChanged(ListSelectionEvent e)
         {
             // display information in EAST borderLayout when selection changes
-            if(e.getValueIsAdjusting() == true)
+            JList list1 = (JList) e.getSource();
+            // get the list and artist object which is selected
+            Artist artist1 = (Artist) list1.getSelectedValue();
+
+            // get frame to fill in data in BorderLayout.EAST panel
+            JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(list1);
+            BorderLayout bLayout1 = (BorderLayout) frm1.getContentPane().getLayout();
+            JPanel eastPanel = (JPanel) bLayout1.getLayoutComponent(BorderLayout.EAST);
+
+            // get Layout of panel at BorderLayout.EAST in mainframe and components
+            BorderLayout panelLayout = (BorderLayout) eastPanel.getLayout();
+            JPanel dataPanel = (JPanel) panelLayout.getLayoutComponent(BorderLayout.NORTH);
+            JScrollPane scrollTextArea = (JScrollPane) panelLayout.getLayoutComponent(BorderLayout.CENTER);
+            JTextArea songArea = (JTextArea) scrollTextArea.getViewport().getView();
+
+            ArrayList<JTextField> txtF = new ArrayList<>();
+            for(Component c : dataPanel.getComponents())
             {
-                // get the list and artist object which is selected
-                JList list1 = (JList) e.getSource();
-                Artist artist1 = (Artist) list1.getSelectedValue();
+                if(c instanceof JTextField)
+                {
+                    txtF.add((JTextField) c);
+                }
+            }
 
-                // get frame to fill in data in BorderLayout.EAST panel
-                JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(list1);
-                BorderLayout bLayout1 = (BorderLayout) frm1.getContentPane().getLayout();
-                JPanel eastPanel = (JPanel) bLayout1.getLayoutComponent(BorderLayout.EAST);
-
-                // get Layout of panel at BorderLayout.EAST in mainframe and components
-                BorderLayout panelLayout = (BorderLayout) eastPanel.getLayout();
-                JPanel dataPanel = (JPanel) panelLayout.getLayoutComponent(BorderLayout.NORTH);
-                JScrollPane scrollTextArea = (JScrollPane) panelLayout.getLayoutComponent(BorderLayout.CENTER);
-                JTextArea songArea = (JTextArea) scrollTextArea.getViewport().getView();
-
+            if(list1.getSelectedIndex() > -1)
+            {
                 // write dob, placeOfBirth & bornOnWeekend to TextFields in dataPanel
                 // TextField attached to GridLayout
-                ArrayList<JTextField> txtF = new ArrayList<>();
-                for(Component c : dataPanel.getComponents())
-                {
-                    if(c instanceof JTextField)
-                    {
-                        txtF.add((JTextField) c);
-                    }
-                }
                 txtF.get(0).setText(artist1.getDob());
                 txtF.get(1).setText(artist1.getPlaceOfBirth());
                 if(Utils.checkIfBornOnWeekend(artist1.getDob()))
@@ -150,6 +187,13 @@ public class GUI
 
                 songArea.setText(songText);
 
+            }
+            else
+            {
+                txtF.get(0).setText("");
+                txtF.get(1).setText("");
+                txtF.get(2).setText("");
+                songArea.setText("");
             }
 
         }
@@ -257,6 +301,7 @@ public class GUI
         manualData.addActionListener(menuListener);
         dbData.addActionListener(menuListener);
         delData.addActionListener(menuListener);
+        delData.setEnabled(false);
 
         southPane.add(manualData, BorderLayout.EAST);
         southPane.add(dbData, BorderLayout.CENTER);
