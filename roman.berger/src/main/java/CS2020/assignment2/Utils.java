@@ -80,7 +80,7 @@ public class Utils
         Artist MacMiller = new Artist();
 
         MacMiller.setFirstName("Malcom James");
-        MacMiller.setLastName("McCormick");
+        MacMiller.setLastName("McCormick*");
         MacMiller.setDob("1992 Jan 19");
         MacMiller.setPlaceOfBirth("Pittsburgh, Pennsylvania");
 
@@ -96,7 +96,7 @@ public class Utils
         Artist Joji = new Artist();
 
         Joji.setFirstName("George Kusunoki");
-        Joji.setLastName("Miller");
+        Joji.setLastName("Miller*");
         Joji.setDob("1992 Sep 18");
         Joji.setPlaceOfBirth("Osaka, Japan");
 
@@ -125,7 +125,7 @@ public class Utils
         l1.addElement(MacMiller);
         l1.addElement(Joji);
         list.setModel(l1);
-        list.setBounds(100, 100, 75, 75);
+        // list.setBounds(100, 100, 75, 75);
 
     }
 
@@ -156,65 +156,80 @@ public class Utils
        // creates necessary objects
        // split name into fName and lName
 
-        Connection dbConnect = null;
-        Statement stmnt = null;
-        ResultSet artistSet = null;
-        ResultSet songSet = null;
+        Connection dbConnectArtist = null;
+        Connection dbConnectSong = null;
+        Statement stmntArtist = null;
+        Statement stmntSong = null;
+        ResultSet artistResultSet = null;
+        ResultSet songResultSet = null;
         // Statement stmnt = null;
 
-        String artistQuery = "SELECT artistID, name, placeOfBirth, dob FROM Artist";
+        String artistQuery = "SELECT artistID, name, placeOfBirth, dob FROM Artist;";
 
         DefaultListModel<Artist> l1 = (DefaultListModel) list.getModel();
 
         try
         {
-            dbConnect = Utils.connectToDatabase();
-            stmnt = dbConnect.createStatement();
-            artistSet = stmnt.executeQuery(artistQuery);
+            dbConnectArtist = Utils.connectToDatabase();
+            dbConnectSong = Utils.connectToDatabase();
+            stmntArtist = dbConnectArtist.createStatement();
+            stmntSong = dbConnectSong.createStatement();
+            artistResultSet = stmntArtist.executeQuery(artistQuery);
+            ArrayList<Artist> artistList = new ArrayList<>();
+            // artistResultSet.next();
 
-            while(artistSet.next())
+            while(artistResultSet.next())
             {
                 // create artist and songs for artists
-                Artist artist1 = new Artist(UUID.fromString(artistSet.getString("artistID")));
+                String a = artistResultSet.getString("artistID").strip();
+                // System.out.print("RowNo:" + artistResultSet.getRow() + "\t |");
+                // System.out.println(a + "\t | length: " + a.length());
+
+                Artist artist1 = new Artist(UUID.fromString(a));
                 // get full name and split into fName and lName
                 // ignore middle name
-                String name = artistSet.getString("name");
+                String name = artistResultSet.getString("name");
                 String[] splitName = name.split("\\s+");
                 artist1.setFirstName(splitName[0]);
                 artist1.setLastName(splitName[splitName.length - 1]);
 
                 // set date of birth and place of birth
-                artist1.setDob(artistSet.getString("dob"));
-                artist1.setPlaceOfBirth(artistSet.getString("placeOfBirth"));
+                artist1.setDob(artistResultSet.getString("dob"));
+                artist1.setPlaceOfBirth(artistResultSet.getString("placeOfBirth"));
 
                 // get resultset of artists songs
                 String songQuery = "SELECT songID, artistID, title, duration FROM Song WHERE artistID = '"
-                    + artistSet.getString("artistID") + "';";
-                songSet = stmnt.executeQuery(songQuery);
+                    + artistResultSet.getString("artistID") + "';";
+                songResultSet = stmntSong.executeQuery(songQuery);
 
                 // create ArrayList of Song and add songs to it
                 ArrayList<Song> songList = new ArrayList<>();
-                while(songSet.next())
+
+                while(songResultSet.next())
                 {
                     Song song1 = new Song();
-                    song1.setSongID(UUID.fromString(songSet.getString("songID")));
-                    song1.setArtistID(UUID.fromString(artistSet.getString("artistID")));
-                    String title = songSet.getString("title");
+                    song1.setSongID(UUID.fromString(songResultSet.getString("songID").strip()));
+                    song1.setArtistID(UUID.fromString(artistResultSet.getString("artistID")));
+                    String title = songResultSet.getString("title");
                     title.replace("\r\n?|\n", "");
-                    song1.setTitle(songSet.getString("title").replace("\r\n?|\n", ""));
-                    song1.setDuration(songSet.getInt("duration"));
+                    song1.setTitle(songResultSet.getString("title").replace("\r\n?|\n", ""));
+                    song1.setDuration(songResultSet.getInt("duration"));
 
                     songList.add(song1);
                 }
 
                 artist1.setSongs(songList);
 
-                l1.addElement(artist1);
+                artistList.add(artist1);
+                //System.out.println(artistResultSet.isClosed());
             }
+            for(Artist a : artistList)
+            {
+                l1.addElement(a);
 
-            System.out.println(l1);
+            }
             list.setModel(l1);
-            list.setBounds(100, 100, 75, 75);
+            // list.setBounds(100, 100, 75, 75);
         }
         catch(SQLException e)
         {
@@ -224,9 +239,13 @@ public class Utils
         {
            try
            {
-                if(dbConnect != null)
+                if(dbConnectArtist != null)
                 {
-                    dbConnect.close();
+                    dbConnectArtist.close();
+                }
+                if(dbConnectSong != null)
+                {
+                    dbConnectSong.close();
                 }
            }
            catch(Exception e)
