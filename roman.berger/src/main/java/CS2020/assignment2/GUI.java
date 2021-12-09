@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.*;
 
 public class GUI
 {
@@ -75,6 +76,8 @@ public class GUI
 
                 case "deleteData":
                     // delete selected data from list
+
+                    // artistList3.setSelectedIndex(0);
                     break;
 
                 case "OkButton":
@@ -89,6 +92,53 @@ public class GUI
                     System.out.println("event occured");
                     break;
             }
+        }
+    }
+
+    public class ListSelectionHandler implements ListSelectionListener
+    {
+        public void valueChanged(ListSelectionEvent e)
+        {
+            // display information in EAST borderLayout when selection changes
+            if(e.getValueIsAdjusting() == true)
+            {
+                // get the list and artist object which is selected
+                JList list1 = (JList) e.getSource();
+                Artist artist1 = (Artist) list1.getSelectedValue();
+
+                // get frame to fill in data in BorderLayout.EAST panel
+                JFrame frm1 = (JFrame) SwingUtilities.getWindowAncestor(list1);
+                BorderLayout bLayout1 = (BorderLayout) frm1.getContentPane().getLayout();
+                JPanel eastPanel = (JPanel) bLayout1.getLayoutComponent(BorderLayout.EAST);
+
+                // get Layout of panel at BorderLayout.EAST in mainframe and components
+                BorderLayout panelLayout = (BorderLayout) eastPanel.getLayout();
+                JPanel dataPanel = (JPanel) panelLayout.getLayoutComponent(BorderLayout.NORTH);
+                JScrollPane scrollTextArea = (JScrollPane) panelLayout.getLayoutComponent(BorderLayout.CENTER);
+
+                // write dob, placeOfBirth & bornOnWeekend to TextFields in dataPanel
+                // TextField attached to GridLayout
+                ArrayList<JTextField> txtF = new ArrayList<>();
+                for(Component c : dataPanel.getComponents())
+                {
+                    if(c instanceof JTextField)
+                    {
+                        txtF.add((JTextField) c);
+                    }
+                }
+                txtF.get(0).setText(artist1.getDob());
+                txtF.get(1).setText(artist1.getPlaceOfBirth());
+                if(Utils.checkIfBornOnWeekend(artist1.getDob()))
+                {
+                    txtF.get(2).setText("yes");
+                }
+                else
+                {
+                    txtF.get(2).setText("no");
+                }
+
+            }
+
         }
     }
 
@@ -174,6 +224,7 @@ public class GUI
         JList<Artist> artistList = new JList<>(model);
         artistList.setCellRenderer(new ArtistListCellRenderer());
         artistList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        artistList.addListSelectionListener(new ListSelectionHandler());
 
         JScrollPane artistPane = new JScrollPane(artistList);
         artistPane.setVerticalScrollBar(artistPane.createVerticalScrollBar());
@@ -202,7 +253,7 @@ public class GUI
         // attach to EAST of frame
         JPanel eastPane = new JPanel();
         eastPane.setLayout(new BorderLayout());
-        JTextArea textArea = new JTextArea("Test", 10, 20);
+        JTextArea textArea = new JTextArea("1.", 10, 20);
         JScrollPane scrollText = new JScrollPane(textArea);
 
         // create JPanel for the the data fields above the TextField
@@ -214,8 +265,11 @@ public class GUI
         JLabel weekendLabel = new JLabel("Born on Weekend:");
 
         JTextField dobField = new JTextField(6);
+        dobField.setEditable(false);
         JTextField pobField = new JTextField(6);
+        pobField.setEditable(false);
         JTextField weekendField = new JTextField(6);
+        weekendField.setEditable(false);
 
         //fill JPanel for data
         dataPane.add(dobLabel);
