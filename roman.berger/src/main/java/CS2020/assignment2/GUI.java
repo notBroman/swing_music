@@ -115,6 +115,7 @@ public class GUI
                 BorderLayout panelLayout = (BorderLayout) eastPanel.getLayout();
                 JPanel dataPanel = (JPanel) panelLayout.getLayoutComponent(BorderLayout.NORTH);
                 JScrollPane scrollTextArea = (JScrollPane) panelLayout.getLayoutComponent(BorderLayout.CENTER);
+                JTextArea songArea = (JTextArea) scrollTextArea.getViewport().getView();
 
                 // write dob, placeOfBirth & bornOnWeekend to TextFields in dataPanel
                 // TextField attached to GridLayout
@@ -136,6 +137,18 @@ public class GUI
                 {
                     txtF.get(2).setText("no");
                 }
+
+                int i = 1;
+                String songText = "";
+                // System.out.println(artist1.getSongs());
+                HashMap<UUID,String> formattedSongs = Utils.returnSongDurationAndTitleFormatted(artist1.getSongs());
+                for(UUID key : formattedSongs.keySet())
+                {
+                    songText = songText + Integer.toString(i) + ". " + formattedSongs.get(key) + "\n";
+                    i++;
+                }
+
+                songArea.setText(songText);
 
             }
 
