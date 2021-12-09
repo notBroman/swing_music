@@ -14,11 +14,30 @@ import java.sql.*;
 
 public class Utils
 {
+    /**
+     *  @author Roman Berger
+     *  @version v1.0.0
+     *
+     *  A class of utility functions used throughout the implementation of the assessment
+     *
+     */
 
-
+    /**
+     *  @param
+     *  takes an arrayList of Songs
+     *
+     *  @return
+     *  this function returns a Hasmap where the key is the UUID of the song and the value
+     *  is a string stating the title of the song and the duration
+     *
+     *  @see
+     *  Song.java for the implementation of the Song type
+     *  <https://docs.oracle.com/javase/7/docs/api/java/util/UUID.html>
+     *  for the documentation of the UUID class
+     */
     public static HashMap<UUID, String> returnSongDurationAndTitleFormatted(ArrayList<Song> songList)
     {
-        /*
+       /*
          *  returns a sorted hashmap with all the songs in the songList
          *  key (UUID): SongId
          *  value (String): title (duration in formt min:sec)
@@ -48,6 +67,18 @@ public class Utils
         return formattedSongs;
     }
 
+
+    /**
+     *  @param
+     *  takes a string describing a date
+     *  the format of the date has to be DD-MMM-YYYY
+     *
+     *  @return
+     *  returns a boolean if the specified day was on a weekend
+     *  yes: true
+     *  no: false
+     *
+     */
     public static boolean checkIfBornOnWeekend(String dob)
     {
         /*
@@ -76,6 +107,23 @@ public class Utils
         }
     }
 
+    /**
+     *  @param
+     *  takes a java swing JList and adds example artists and sorts them in alphabetical order of their
+     *  first names
+     *
+     *  the artist added are Joji and MacMiller
+     *  Jojis songs are from the album Nectar
+     *  MacMillers songs are from the album Cirlces
+     *
+     *  @return
+     *  this function returns nothing it just changes the contents of the given parameter
+     *
+     *  @see
+     *  the JList documentation
+     *  <https://docs.oracle.com/javase/7/docs/api/javax/swing/JList.html>
+     *
+     */
     public static void createExampleArtists(JList<Artist> list)
     {
         /*
@@ -148,6 +196,19 @@ public class Utils
 
     }
 
+    /**
+     *  @param
+     *  this function takes no parameters
+     *
+     *  @return
+     *  it returns a connection to the specified database (sqlite)
+     *  the library used is maintained by Xerial
+     *
+     *  @see
+     *  the github page of the package:
+     *  <https://github.com/xerial/sqlite-jdbc>
+     *
+     */
     public static Connection connectToDatabase()
     {
         /*
@@ -169,6 +230,21 @@ public class Utils
         return dbConnect;
     }
 
+    /**
+     *  @param
+     *  takes a JList of Artists
+     *
+     *  @return
+     *  nothing
+     *
+     *  the function uses the function connectToDatabase to to connect to the database and read the
+     *  sqlite database provided in the resources
+     *
+     *  2 seperate connections must be opened for each table that is to be accessed one
+     *
+     *  the added artists are again ordered in alphabetical order of ther first names
+     *
+     */
     public static void readArtistsAndSongsFromDatabase(JList<Artist> list)
     {
        // reads artists and songs from db
@@ -281,6 +357,21 @@ public class Utils
         }
     }
 
+    /**
+     *  @param
+     *  an arraylist of artists that is to be sorted
+     *
+     *  @return
+     *  nothing
+     *
+     *  the function implements the selection sort algorithm
+     *
+     *  @see
+     *  a description of the sorting algorithm is given below
+     *  time complexity and space complexity can be read from there as well
+     *  <https://en.wikipedia.org/wiki/Selection_sort>
+     *
+     */
     public static void selSortArtists(ArrayList<Artist> artistList)
     {
         int start = 0;
