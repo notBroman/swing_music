@@ -16,7 +16,7 @@ public class Utils
 {
 
 
-    public static HashMap<UUID, String> returnSongDurationAndTitleformatted(ArrayList<Song> songList)
+    public static HashMap<UUID, String> returnSongDurationAndTitleFormatted(ArrayList<Song> songList)
     {
         /*
          *  returns a sorted hashmap with all the songs in the songList
@@ -41,7 +41,8 @@ public class Utils
             // songIter.getDuration()/60 gives minutes, because int/int = int in java
             BiFunction<String, Integer, String> formatted = (title, duration) -> "" + title + "(" + duration/60 + ":" + duration%60 + ")";
             // add entry to HashMap
-            formattedSongs.put(songIter.next().getSongID(), formatted.apply(songIter.next().getTitle(), songIter.next().getDuration()));
+            Song a = songIter.next();
+            formattedSongs.put(a.getSongID(), formatted.apply(a.getTitle(), a.getDuration()));
         }
 
         return formattedSongs;
@@ -216,7 +217,7 @@ public class Utils
                     song1.setArtistID(UUID.fromString(artistResultSet.getString("artistID")));
                     String title = songResultSet.getString("title");
                     title.replace("\r\n?|\n", "");
-                    song1.setTitle(songResultSet.getString("title").replace("\r\n?|\n", ""));
+                    song1.setTitle(songResultSet.getString("title").replace("\n", ""));
                     song1.setDuration(songResultSet.getInt("duration"));
 
                     songList.add(song1);
