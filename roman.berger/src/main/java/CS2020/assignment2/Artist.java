@@ -4,6 +4,18 @@ import java.util.*;
 
 public class Artist
 {
+    /**
+     *  @author Roman Berger
+     *
+     *  the fields are:
+     *  artistID as UUID
+     *  firstName as String
+     *  lastname as String
+     *  dateOfBirth (dob) as String in format "DD MMM YYYY"
+     *  placeOfBirth as String
+     *  songs as an arraylist of type song objects
+     *
+     */
     private UUID artistID;
     private String firstName;
     private String lastName;
@@ -11,17 +23,48 @@ public class Artist
     private String placeOfBirth;
     private ArrayList<Song> songs = new ArrayList<>();
 
+    /**
+     *  Constructor 1
+     *
+     *  @param
+     *  none
+     *
+     *  @return
+     *  an instance of the Artist class with a random ArtistID
+     *
+     */
     public Artist()
     {
         // prevent collisions when creating new UUID
         this.artistID = UUID.randomUUID();
     }
 
+    /**
+     *  Constructor 2
+     *
+     *  @param
+     *  none
+     *
+     *  @return
+     *  an instance of the Artist class with a specified ArtistID
+     *
+     */
     public Artist(UUID artistID)
     {
         this.artistID = artistID;
     }
 
+    /**
+     *  setters for all fields
+     *
+     *  @param
+     *  take value of field as parameter
+     *
+     *  @return
+     *  none
+     *
+     *  set the vaue of the field
+     */
     public void setArtistID(UUID artistID)
     {
         this.artistID = artistID;
@@ -52,6 +95,16 @@ public class Artist
         this.songs = songList;
     }
 
+    /**
+     *  getters for all fields
+     *
+     *  @param
+     *  none
+     *
+     *  @return
+     *  the value of a field of the instance they are invoked on
+     *
+     */
     public UUID getArtistID()
     {
         return this.artistID;
