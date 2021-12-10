@@ -1,7 +1,9 @@
 package CS2020.assignment2;
 
 /**
- * Hello world!
+ * the main program
+ *
+ * create the GUI object and has it constructed
  *
  */
 public class App
